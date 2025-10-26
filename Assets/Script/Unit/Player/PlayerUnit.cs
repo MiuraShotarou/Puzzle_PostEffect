@@ -13,13 +13,13 @@ public class PlayerUnit : UnitBase
     
     void Start()
     {
-        GameDataManager.Instance.Tilemap.SetTile(_attackTilePos, GameDataManager.Instance.AttackTileBase);
         _playerObj = GameDataManager.Instance.PlayerObj;
         Debug.Log("1" + _playerObj);
         //Test
         BulletType = BulletType.Normal;
         _attackTilePos = new Vector3Int(0, _attackRange, 0);
         _beforeTilePos = _attackTilePos;
+        GameDataManager.Instance.Tilemap.SetTile(_attackTilePos, GameDataManager.Instance.AttackTileBase);
     }
     void Update()
     {
@@ -33,12 +33,8 @@ public class PlayerUnit : UnitBase
         //Shootメソッドの起動
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
+            Debug.Log("Mouse.current.leftButton.wasPressedThisFrame");
             Shoot();
-        }
-        //テスト用
-        if (!_playerObj)
-        {
-            Debug.Log("");
         }
     }
     
@@ -88,5 +84,10 @@ public class PlayerUnit : UnitBase
                 _time = 0;
             }
         }
+    }
+
+    public void OnFire(InputAction.CallbackContext context)
+    {
+        Shoot();
     }
 }

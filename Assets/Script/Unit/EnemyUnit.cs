@@ -24,7 +24,6 @@ public class EnemyUnit : UnitBase
     }
     void Advance()
     {
-        Debug.Log(MovePos);
         transform.position += MovePos; //プレイヤーに追従できるようにしたい
         if (transform.position == new Vector3(0, 0, 0))
         {
