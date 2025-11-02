@@ -9,7 +9,6 @@ public abstract class UnitBase : MonoBehaviour
     {
         if (BulletType == BulletType.Normal)
         {
-            Debug.Log($"基底{_attackTilePos}");
             GameDataManager.Instance.Tilemap.SetTile(_attackTilePos, GameDataManager.Instance.AttackTileBase);
         }
     }

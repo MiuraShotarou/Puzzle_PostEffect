@@ -2,6 +2,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// ゲーム全体で保持する必要のあるデータを格納する。
@@ -16,7 +17,7 @@ public class GameDataManager : MonoBehaviour
     public TileBase PredictedAttackTileBase;
     public TileBase AttackTileBase;
     public (string name, GameObject obj)[] EnemyTupleArray;
-    private MyProject InputSystem;
+    private MyProject NewInputSystem;
     public static GameDataManager Instance { get; private set; }
     private void Awake()
     {
@@ -33,7 +34,7 @@ public class GameDataManager : MonoBehaviour
         Initialize(); //シーンのロード時にも
         SceneManager.activeSceneChanged += ChangeSceneLoaded;
         InGameManager = GetComponent<InGameManager>();
-        InputSystem = new MyProject();
+        NewInputSystem = new MyProject();
     }
     
     void Initialize()
@@ -51,9 +52,13 @@ public class GameDataManager : MonoBehaviour
 
     private void OnEnable()
     {
-        if (InputSystem != null)
+        if (NewInputSystem != null)
         {
-            InputSystem.Enable();
+            NewInputSystem.Enable();
+        }
+        if (!Mouse.current.enabled)
+        {
+            InputSystem.EnableDevice(Mouse.current);
         }
     }
     //<パラメーター関連>

@@ -14,8 +14,6 @@ public class PlayerUnit : UnitBase
     void Start()
     {
         _playerObj = GameDataManager.Instance.PlayerObj;
-        Debug.Log("1" + _playerObj);
-        //Test
         BulletType = BulletType.Normal;
         _attackTilePos = new Vector3Int(0, _attackRange, 0);
         _beforeTilePos = _attackTilePos;
@@ -33,7 +31,6 @@ public class PlayerUnit : UnitBase
         //Shootメソッドの起動
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            Debug.Log("Mouse.current.leftButton.wasPressedThisFrame");
             Shoot();
         }
     }
