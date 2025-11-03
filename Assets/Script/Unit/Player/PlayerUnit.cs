@@ -2,11 +2,13 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 /// <summary> プレイヤーの機能を実装するクラス </summary>
-public class PlayerUnit : UnitBase
+public class PlayerUnit : MonoBehaviour
 {
     [SerializeField] int _attackRange;
     [SerializeField, Range(0, 2)] float _inputDuration;
-    GameObject _playerObj;//キャッシュ
+    BulletType BulletType;
+    Vector3Int _attackTilePos;
+    GameObject _playerObj; //キャッシュ
     Vector3Int _beforeTilePos; //Shoot, OnMoveの際に更新
     Vector2 _move;
     float _time;
@@ -35,9 +37,12 @@ public class PlayerUnit : UnitBase
         }
     }
     
-    protected override void Shoot()
+    void Shoot()
     {
-        base.Shoot();
+        if (BulletType == BulletType.Normal)
+        {
+            GameDataManager.Instance.Tilemap.SetTile(_attackTilePos, GameDataManager.Instance.AttackTileBase);
+        }
         if (GameDataManager.Instance.EnemyObjectArray.Any(obj => obj.transform.position == _attackTilePos))
         {
             GameDataManager.Instance.EnemyObjectArray.FirstOrDefault(obj => obj.transform.position == _attackTilePos).GetComponent<EnemyUnit>().Death();
@@ -81,10 +86,5 @@ public class PlayerUnit : UnitBase
                 _time = 0;
             }
         }
-    }
-
-    public void OnFire(InputAction.CallbackContext context)
-    {
-        Shoot();
     }
 }
