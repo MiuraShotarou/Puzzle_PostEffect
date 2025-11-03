@@ -1,8 +1,8 @@
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
-using UnityEngine.InputSystem;
 
 /// <summary>
 /// ゲーム全体で保持する必要のあるデータを格納する。
@@ -11,6 +11,7 @@ public class GameDataManager : MonoBehaviour
 {
     [HideInInspector] public GameObject[] EnemyObjectArray;
     [HideInInspector] public InGameManager InGameManager;
+    [HideInInspector] public UIManager UIManager;
     [HideInInspector] public GameObject PlayerObj;
     [HideInInspector] public Tilemap Tilemap;
     public TileBase NormalTileBase;
@@ -31,9 +32,10 @@ public class GameDataManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        UIManager = GetComponent<UIManager>();
+        InGameManager = GetComponent<InGameManager>();
         Initialize(); //シーンのロード時にも
         SceneManager.activeSceneChanged += ChangeSceneLoaded;
-        InGameManager = GetComponent<InGameManager>();
         NewInputSystem = new MyProject();
     }
     
@@ -43,6 +45,18 @@ public class GameDataManager : MonoBehaviour
         Tilemap = GameObject.FindWithTag("Tilemap").GetComponent<Tilemap>();
         EnemyObjectArray = FindObjectsByType<EnemyUnit>(FindObjectsSortMode.None).Select(unit => unit.gameObject).ToArray();
         EnemyTupleArray = EnemyObjectArray.Select(enemy => (enemy.name, enemy)).ToArray();
+        for (int i = 0; i < UIManager.SlotObjectArray.Length; i++)
+        {
+            if (i < EnemyObjectArray.Length)
+            {
+                UIManager.SlotObjectArray[i].SetActive(true);
+            }
+            else
+            {
+                UIManager.SlotObjectArray[i].SetActive(false);
+            }
+        }
+        UIManager.CurrentSlotIndex = 0;
     }
 
     void ChangeSceneLoaded(Scene current, Scene next)

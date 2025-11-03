@@ -4,7 +4,7 @@ public class AcquisitionAnimation : MonoBehaviour
 {
     Vector3[] _bezierA;
     Vector3[] _bezierB;
-    
+    Vector3 _currentSlotPosition;
     float _duration = 10f; // 何秒で終点まで進むか
     private float _t = 0f;
 
@@ -14,7 +14,7 @@ public class AcquisitionAnimation : MonoBehaviour
         if (_bezierA == null || _bezierB == null)
         {
             _bezierA = new[] { transform.position, new Vector3(transform.position.x + 10, transform.position.y - 0.5f)}; //Enemy側のライン
-            _bezierB = new[] { new Vector3(transform.position.x, -6.25f - 0.5f), new Vector3(-11.3f, -6.25f)}; //ターゲット側のライン
+            _bezierB = new[] { new Vector3(transform.position.x, _currentSlotPosition.y - 0.5f), _currentSlotPosition}; //ターゲット側のライン
         }
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(_bezierA[0], _bezierA[1]);
@@ -23,8 +23,9 @@ public class AcquisitionAnimation : MonoBehaviour
 #endif
     void OnEnable()
     {
+        _currentSlotPosition = GameDataManager.Instance.UIManager.SlotObjectArray[GameDataManager.Instance.UIManager.CurrentSlotIndex].transform.position;
         _bezierA = new[] { transform.position, new Vector3(transform.position.x + 10, transform.position.y - 0.5f)}; //Enemy側のライン
-        _bezierB = new[] { new Vector3(transform.position.x, -6.25f - 0.5f), new Vector3(-11.3f, -6.25f)}; //ターゲット側のライン
+        _bezierB = new[] { new Vector3(transform.position.x, _currentSlotPosition.y - 0.5f), _currentSlotPosition}; //ターゲット側のライン
     }
 
     void Update()
@@ -36,6 +37,9 @@ public class AcquisitionAnimation : MonoBehaviour
         }
         else
         {
+            transform.position = _currentSlotPosition;
+            // あまり良い設計とは言えない
+            GameDataManager.Instance.UIManager.CurrentSlotIndex++;
             enabled = false;
         }
     }

@@ -1,8 +1,7 @@
 using System;
 using UnityEngine;
-using DG.Tweening;
 /// <summary> Script内で敵の情報を参照するためのクラス。ScriptableObjectを保持し、EnemyPrefabにアタッチして使う </summary>
-public class EnemyUnit : UnitBase
+public class EnemyUnit : MonoBehaviour
 {
     public EnemyDataBase Data;
     [HideInInspector] public Vector3Int MovePos;
@@ -17,7 +16,6 @@ public class EnemyUnit : UnitBase
         Name = Data.Name;
         AttackRange = Data.AttackRange;
         MoveRange = Data.MoveRange;
-        Initialize();
         DeathAction = Data.DeathAction;
         GameDataManager.Instance.InGameManager.AdvanceTurn += Advance;
         DecideMovePos();
@@ -38,9 +36,5 @@ public class EnemyUnit : UnitBase
     void DecideMovePos()
     {
         MovePos = new Vector3Int(-MathF.Sign(transform.position.x) * MoveRange, -MathF.Sign(transform.position.y) * MoveRange, 0); //敵のいるポジションによって攻撃方向を修正する
-    }
-    void Initialize()
-    {
-        
     }
 }
